@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Carrega o arquivo específico de desenvolvimento
+load_dotenv(os.path.join(BASE_DIR, ".env.development"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -78,11 +83,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': process.env.POSTGRES_DB,
-        'USER': process.env.POSTGRES_USER,
-        'PASSWORD': process.env.POSTGRES_PASSWORD,
-        'HOST': process.env.POSTGRES_HOST,
-        'PORT': process.env.POSTGRES_PORT,
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
 }
 

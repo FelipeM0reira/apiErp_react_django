@@ -9,5 +9,4 @@ class UserSerializer(serializers.ModelSerializer):
           'id', 
           'name', 
           'email', 
-          'is_owner'
         )

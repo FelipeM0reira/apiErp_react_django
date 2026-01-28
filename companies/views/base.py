@@ -48,4 +48,4 @@ class Base(APIView):
         if not task:
             raise NotFoundTask()
         
-        return task and task
+        return task

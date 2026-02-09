@@ -26,7 +26,7 @@ def check_permission(user, method, permission_to):
       if Permission.objects.filter(id=permission['permission_id'], codename=required_permission).exists():
         return True
       
-class EmployeePermission (permissions.BasePermission):
+class EmployeesPermission (permissions.BasePermission):
   message = 'You do not have permission to perform this action on Employee.'
   
   def has_permission(self, request, _view):

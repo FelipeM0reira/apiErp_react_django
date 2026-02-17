@@ -4,7 +4,7 @@ from accounts.models import User_Groups, User, Group, Group_Permissions
 from django.contrib.auth.models import Permission
 
 
-class EmployeeSerializer (serializers.ModelSerializer):
+class EmployeesSerializer (serializers.ModelSerializer):
     name = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
     

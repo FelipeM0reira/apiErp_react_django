@@ -36,6 +36,7 @@ class Employees(Base):
           name=name,
           email=email,
           password=password,
+          type_account='employee',
           company_id=enterprise_id,
         )
         

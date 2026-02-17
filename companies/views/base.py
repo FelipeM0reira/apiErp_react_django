@@ -6,9 +6,9 @@ from companies.models import Employee,Enterprise, Task, TaskStatus
 from accounts.models import Group
 
 class Base(APIView):
-    def get_interprise_id(self, user_id):
+    def get_enterprise_id(self, user_id):
         employee = Employee.objects.filter(user_id=user_id).first()
-        owner = Enterprise.objects.filter(owner_id=user_id).first()
+        owner = Enterprise.objects.filter(user_id=user_id).first()
         
         if employee:
             return employee.enterprise_id
@@ -18,7 +18,7 @@ class Base(APIView):
             return None
           
     def get_employee(self, employee_id, user_id):
-        enterprise_id = self.get_interprise_id(user_id)
+        enterprise_id = self.get_enterprise_id(user_id)
         employee = Employee.objects.filter(id=employee_id, enterprise_id=enterprise_id).first()
         
         if not employee:

@@ -48,15 +48,13 @@ class Employees(Base):
 class EmployeeDetail(Base):
     permission_classes = [EmployeesPermission]
     
-    def delete(self, request, employee_id):
-        enterprise_id = self.get_enterprise_id(request.user.id)
+    def get(self, request, employee_id):
+        employee = self.get_employee(employee_id, request.user.id)
         
-        def get(self, request, employee_id):
-            employee = self.get_employee(employee_id, request.user.id)
-            serializer = EmployeeSerializer(employee)
-            
-            return Response(serializer.data)
-        
+        serializer = EmployeeSerializer(employee)
+
+        return Response(serializer.data)
+
     def put(self, request, employee_id):
         groups = request.data.get('groups')
         
@@ -76,6 +74,7 @@ class EmployeeDetail(Base):
         User_Groups.objects.filter(user_id=employee.user_id).delete()
         
         if groups:
+            # 1,2,3,4 -> [1, 2, 3, 4]
             groups = groups.split(',')
             
             for group_id in groups:
@@ -89,13 +88,14 @@ class EmployeeDetail(Base):
 
     def delete(self, request, employee_id):
         employee = self.get_employee(employee_id, request.user.id)
-        
+
         check_if_owner = User.objects.filter(id=employee.user.id, is_owner=1).exists()
         if check_if_owner:
             raise APIException("You can't delete the owner of the enterprise.", code="cant_delete_owner")
-        
+
         employee.delete()
-        User.objects.filter(id=employee.user_id).delete()
         
+        User.objects.filter(id=employee.user_id).delete()
+
         return Response({"success": True})
 

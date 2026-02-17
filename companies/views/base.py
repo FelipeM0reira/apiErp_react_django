@@ -1,4 +1,4 @@
-from rest_framework import APIView
+from rest_framework.views import APIView
 
 from companies.utils.exceptions import NotFoundEmployee, NotFoundGroup, NotFoundTask, NotFoundTaskStatus
 from companies.models import Employee,Enterprise, Task, TaskStatus

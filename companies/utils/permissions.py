@@ -27,7 +27,7 @@ def check_permission(user, method, permission_to):
         return True
       
 class EmployeesPermission (permissions.BasePermission):
-  message = 'You do not have permission to perform this action on Employee.'
+  message = 'você não tem permissão para realizar esta ação em Employee.'
   
   def has_permission(self, request, _view):
     return check_permission(request.user, request.method, permission_to='employee')

@@ -17,7 +17,7 @@ class Employees(Base):
         enterprise_id = self.get_enterprise_id(request.user.id)
         
         #Get owner of enterprise
-        owner_id = Enterprise.objects.values('user_id').filter(id=enterprise_id).first()['user_id']
+        owner_id = Enterprise.objects.values('user').filter(id=enterprise_id).first()['user_id']
         
         employees = Employee.objects.filter(enterprise_id=enterprise_id).exclude(user_id=owner_id).all()
         

@@ -9,7 +9,7 @@ urlpatterns = [
     path('employees/<int:employee_id>', EmployeeDetail.as_view()),
     
   # Groups And Permissions Endpoints  
-    path('permissions', PermissionsDetail.as_view()),
+    path('permission', PermissionsDetail.as_view()),
 ]
 
 

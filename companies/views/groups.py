@@ -20,3 +20,61 @@ class Groups(Base):
         serializer = GroupsSerializer(groups, many=True)
         
         return Response({"groups": serializer.data})
+    
+    def post(self, request):
+        enterprise_id = self.get_enterprise_id(request.user.id)
+        
+        name = request.data.get('name')
+        permissions = request.data.get('permissions')
+        
+        if not name:
+            raise RequiredFields
+        
+        created_group = Group.objects.create(
+            name=name,
+            enterprise_id=enterprise_id
+        )
+        
+        if permissions:
+            permissions = permissions.split(',')
+            
+            try:
+                for item in permissions:
+                    permissions = Permission.objects.filter(id=item).exists()
+                    
+                    if not permissions:
+                        created_group.delete()
+                        raise APIException("Permission {p} does not exist.".format(p=item))
+                    
+                    if not Group_Permissions.objects.filter(group_id=created_group.id, permission_id=item).exists():
+                        Group_Permissions.objects.create(
+                            group_id=created_group.id,
+                            permission_id=item
+                        )
+            except ValueError:
+                created_group.delete()
+                raise APIException("Send the permissions in the correct format.")
+        return Response({"success": True})
+    
+class GroupDetail(Base):
+    permission_classes = [GroupsPermission]
+    
+    def get(self, request, group_id):
+        enterprise_id = self.get_enterprise_id(request.user.id)
+        
+        self.get_group(group_id, enterprise_id)
+        group = Group.objects.filter(id=group_id).first()
+        
+        if not group:
+            raise APIException("Group does not exist.")
+        
+        serializer = GroupsSerializer(group)
+        
+        return Response({"group": serializer.data})
+    
+    def delete(self, request, group_id):
+        enterprise_id = self.get_enterprise_id(request.user.id)
+        
+        Group.objects.filter(id=group_id, enterprise_id=enterprise_id).delete()
+        
+        return Response({"success": True})
